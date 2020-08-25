@@ -1,0 +1,11 @@
+version: "3"
+services:
+  next:
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/root/dfd-editor
+      - node_modules:/root/dfd-editor/node_modules
+volumes:
+  node_modules:
