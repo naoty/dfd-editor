@@ -1,4 +1,4 @@
-import "normalize.css";
+import "../styles/index.css";
 import { AppProps } from "next/app";
 import React, { ReactElement } from "react";
 

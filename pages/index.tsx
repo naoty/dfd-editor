@@ -1,14 +1,13 @@
 import React, { ReactElement } from "react";
 
 export default function Index(): ReactElement {
-  const handleSubmit = event => {
-    console.log(event);
-    event.preventDefault();
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="submit" />
-    </form>
+    <div className="flex">
+      <p className="w-1/4">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
+        quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
+        nihil.
+      </p>
+    </div>
   );
 }
