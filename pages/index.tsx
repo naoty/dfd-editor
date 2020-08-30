@@ -47,9 +47,8 @@ const Index: React.FC = () => {
   ]);
 
   return (
-    <main className="grid grid-cols-3">
-      <div className="col-span-1 h-screen border-r">
-        <h1 className="text-2xl">Nodes</h1>
+    <main className="grid grid-cols-3 grid-rows-2">
+      <div className="col-span-1 row-span-1 p-4 border-r border-b">
         <table className="table-auto w-full">
           <thead>
             <tr>
@@ -70,8 +69,9 @@ const Index: React.FC = () => {
             ))}
           </tbody>
         </table>
+      </div>
 
-        <h1 className="text-2xl">Edges</h1>
+      <div className="col-span-1 row-span-1 row-start-2 p-4 border-r">
         <table className="table-auto w-full">
           <thead>
             <tr>
@@ -92,7 +92,7 @@ const Index: React.FC = () => {
         </table>
       </div>
 
-      <div className="col-span-2 h-screen">
+      <div className="col-span-2 row-span-2 p-4 h-screen">
         <h1 className="text-4xl">Here is right</h1>
       </div>
     </main>
