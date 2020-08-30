@@ -48,51 +48,55 @@ const Index: React.FC = () => {
 
   return (
     <main className="grid grid-cols-3 grid-rows-2">
-      <div className="col-span-1 row-span-1 p-4 border-r border-b">
-        <table className="table-auto w-full">
-          <thead>
-            <tr>
-              <th className="border">ID</th>
-              <th className="border">Type</th>
-              <th className="border">Name</th>
-              <th className="border">Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            {nodes.map(node => (
-              <tr key={node.id}>
-                <td className="border">{node.id}</td>
-                <td className="border">{node.type}</td>
-                <td className="border">{node.name}</td>
-                <td className="border">{node.location}</td>
+      <div className="col-span-1 row-span-1 border-r">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className="border">ID</th>
+                <th className="border">Type</th>
+                <th className="border">Name</th>
+                <th className="border">Location</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {nodes.map(node => (
+                <tr key={node.id}>
+                  <td className="border px-2">{node.id}</td>
+                  <td className="border px-2">{node.type}</td>
+                  <td className="border px-2">{node.name}</td>
+                  <td className="border px-2">{node.location}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div className="col-span-1 row-span-1 row-start-2 p-4 border-r">
-        <table className="table-auto w-full">
-          <thead>
-            <tr>
-              <th className="border">From</th>
-              <th className="border">To</th>
-              <th className="border">Data</th>
-            </tr>
-          </thead>
-          <tbody>
-            {edges.map(edge => (
-              <tr key={`${edge.from}-${edge.to}`}>
-                <td className="border">{edge.from}</td>
-                <td className="border">{edge.to}</td>
-                <td className="border">{edge.data}</td>
+      <div className="col-span-1 row-span-1 row-start-2 border-r">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className="border">From</th>
+                <th className="border">To</th>
+                <th className="border">Data</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {edges.map(edge => (
+                <tr key={`${edge.from}-${edge.to}`}>
+                  <td className="border px-2">{edge.from}</td>
+                  <td className="border px-2">{edge.to}</td>
+                  <td className="border px-2">{edge.data}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div className="col-span-2 row-span-2 p-4 h-screen">
+      <div className="col-span-2 row-span-2 h-screen">
         <h1 className="text-4xl">Here is right</h1>
       </div>
     </main>
