@@ -6,13 +6,10 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "prettier",
-    "prettier/@typescript-eslint",
     "prettier/react",
   ],
-  parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -20,11 +17,22 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint", "react"],
+  plugins: ["react"],
   rules: {},
   settings: {
     react: {
       version: "detect",
     },
   },
+  overrides: [
+    {
+      files: ["**/*.ts", "**/*.tsx"],
+      extends: [
+        "plugin:@typescript-eslint/recommended",
+        "prettier/@typescript-eslint",
+      ],
+      parser: "@typescript-eslint/parser",
+      plugins: ["@typescript-eslint"],
+    },
+  ],
 };
