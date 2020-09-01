@@ -48,7 +48,24 @@ const Index: React.FC = () => {
 
   return (
     <main className="grid grid-cols-3 grid-rows-2">
-      <div className="col-span-1 row-span-1 border-r">
+      <div className="col-span-1 row-span-1 border-r border-b">
+        <div className="flex flex-row">
+          <h1 className="flex-grow px-2 font-bold">Nodes</h1>
+          <svg
+            className="w-6 h-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
+          </svg>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -74,6 +91,23 @@ const Index: React.FC = () => {
       </div>
 
       <div className="col-span-1 row-span-1 row-start-2 border-r">
+        <div className="flex flex-row">
+          <h1 className="flex-grow px-2 font-bold">Edges</h1>
+          <svg
+            className="w-6 h-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
+          </svg>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
