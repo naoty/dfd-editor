@@ -53,8 +53,31 @@ const NodesTable: React.FC = () => {
   };
 
   const handleCellBlur = () => {
-    console.log("blurred");
     setEditableCellId(null);
+  };
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const element = event.target as HTMLInputElement;
+    const index = parseInt(element.name);
+    const newNodes = nodes.map((node, nodeIndex) => {
+      if (nodeIndex === index) {
+        node.name = element.value;
+      }
+      return node;
+    });
+    setNodes(newNodes);
+  };
+
+  const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const element = event.target as HTMLInputElement;
+    const index = parseInt(element.name);
+    const newNodes = nodes.map((node, nodeIndex) => {
+      if (nodeIndex === index) {
+        node.location = element.value;
+      }
+      return node;
+    });
+    setNodes(newNodes);
   };
 
   return (
@@ -122,10 +145,12 @@ const NodesTable: React.FC = () => {
                   </span>
                   <input
                     type="text"
+                    name={`${index}`}
                     value={node.name}
                     className={classnames({
                       hidden: editableCellId !== `name_${index}`,
                     })}
+                    onChange={handleNameChange}
                     onBlur={handleCellBlur}
                   />
                 </td>
@@ -141,10 +166,12 @@ const NodesTable: React.FC = () => {
                   </span>
                   <input
                     type="text"
+                    name={`${index}`}
                     value={node.location}
                     className={classnames({
                       hidden: editableCellId !== `location_${index}`,
                     })}
+                    onChange={handleLocationChange}
                     onBlur={handleCellBlur}
                   />
                 </td>
