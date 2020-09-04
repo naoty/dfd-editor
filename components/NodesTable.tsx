@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import classnames from "classnames";
 
 type Node = {
   id: string;
@@ -35,12 +36,25 @@ const NodesTable: React.FC = () => {
     },
   ]);
 
-  const handleClick = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+  const [editableCellId, setEditableCellId] = useState<string | null>(null);
+
+  const handleButtonClick = () => {
     setNodes([
       ...nodes,
       { id: "new nodes", type: null, name: "", location: null },
     ]);
-    event.preventDefault();
+  };
+
+  const handleCellClick = (
+    event: React.MouseEvent<HTMLTableDataCellElement, MouseEvent>
+  ) => {
+    const element = event.target as HTMLElement;
+    setEditableCellId(element.id);
+  };
+
+  const handleCellBlur = () => {
+    console.log("blurred");
+    setEditableCellId(null);
   };
 
   return (
@@ -53,7 +67,7 @@ const NodesTable: React.FC = () => {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          onClick={handleClick}
+          onClick={handleButtonClick}
         >
           <path
             strokeLinecap="round"
@@ -74,12 +88,66 @@ const NodesTable: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {nodes.map(node => (
+            {nodes.map((node, index) => (
               <tr key={node.id}>
-                <td className="border px-2">{node.id}</td>
+                <td className="border px-2">
+                  <span
+                    id={`id_${index}`}
+                    className={classnames({
+                      hidden: editableCellId === `id_${index}`,
+                    })}
+                    onClick={handleCellClick}
+                  >
+                    {node.id}
+                  </span>
+                  <input
+                    type="text"
+                    value={node.id}
+                    className={classnames({
+                      hidden: editableCellId !== `id_${index}`,
+                    })}
+                    onBlur={handleCellBlur}
+                  />
+                </td>
                 <td className="border px-2">{node.type}</td>
-                <td className="border px-2">{node.name}</td>
-                <td className="border px-2">{node.location}</td>
+                <td className="border px-2">
+                  <span
+                    id={`name_${index}`}
+                    className={classnames({
+                      hidden: editableCellId === `name_${index}`,
+                    })}
+                    onClick={handleCellClick}
+                  >
+                    {node.name}
+                  </span>
+                  <input
+                    type="text"
+                    value={node.name}
+                    className={classnames({
+                      hidden: editableCellId !== `name_${index}`,
+                    })}
+                    onBlur={handleCellBlur}
+                  />
+                </td>
+                <td className="border px-2">
+                  <span
+                    id={`location_${index}`}
+                    className={classnames({
+                      hidden: editableCellId === `location_${index}`,
+                    })}
+                    onClick={handleCellClick}
+                  >
+                    {node.location}
+                  </span>
+                  <input
+                    type="text"
+                    value={node.location}
+                    className={classnames({
+                      hidden: editableCellId !== `location_${index}`,
+                    })}
+                    onBlur={handleCellBlur}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
