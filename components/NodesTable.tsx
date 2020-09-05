@@ -62,7 +62,9 @@ const NodesTable: React.FC = () => {
   const [editableCellId, setEditableCellId] = useState<string | null>(null);
 
   const handleButtonClick = () => {
+    const newNodeIndex = nodes.length;
     setNodes([...nodes, new Node(NodeType.Process, "new node", "")]);
+    setEditableCellId(`type_${newNodeIndex}`);
   };
 
   const handleCellClick = (
