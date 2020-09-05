@@ -1,60 +1,56 @@
-import React, { useState } from "react";
+import React from "react";
 import { Node, NodeType } from "../lib/node";
+import { Action } from "../lib/reducer";
 
-const NodesTable: React.FC = () => {
-  const [nodes, setNodes] = useState<Node[]>([
-    new Node(NodeType.ExternalEntity, "User", ""),
-    new Node(NodeType.Process, "API", "/sign_up"),
-    new Node(NodeType.Datastore, "MySQL", "users"),
-  ]);
+interface Props {
+  nodes: Node[];
+  dispatch: React.Dispatch<Action>;
+}
 
-  const handleAddButtonClick = () => {
-    setNodes([...nodes, new Node(NodeType.Process, "new node", "")]);
-  };
-
+const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
   const handleDeleteButtonClick = (
     event: React.MouseEvent<SVGSVGElement, MouseEvent>
   ) => {
     const element = event.currentTarget as SVGSVGElement;
-    const deletedIndex = parseInt(element.dataset["index"]);
-    const newNodes = nodes.filter((_, index) => index !== deletedIndex);
-    setNodes(newNodes);
+    dispatch({
+      type: "DELETE_NODE",
+      payload: {
+        index: parseInt(element.dataset["index"]),
+      },
+    });
   };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const element = event.target as HTMLSelectElement;
-    const index = parseInt(element.name);
-    const newNodes = nodes.map((node, nodeIndex) => {
-      if (nodeIndex === index) {
-        node.type = NodeType[element.value];
-      }
-      return node;
+    const element = event.currentTarget as HTMLSelectElement;
+    dispatch({
+      type: "CHANGE_NODE_TYPE",
+      payload: {
+        index: parseInt(element.dataset["index"]),
+        type: NodeType[element.value],
+      },
     });
-    setNodes(newNodes);
   };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const element = event.target as HTMLInputElement;
-    const index = parseInt(element.name);
-    const newNodes = nodes.map((node, nodeIndex) => {
-      if (nodeIndex === index) {
-        node.name = element.value;
-      }
-      return node;
+    const element = event.currentTarget as HTMLInputElement;
+    dispatch({
+      type: "CHANGE_NODE_NAME",
+      payload: {
+        index: parseInt(element.dataset["index"]),
+        name: element.value,
+      },
     });
-    setNodes(newNodes);
   };
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const element = event.target as HTMLInputElement;
-    const index = parseInt(element.name);
-    const newNodes = nodes.map((node, nodeIndex) => {
-      if (nodeIndex === index) {
-        node.location = element.value;
-      }
-      return node;
+    dispatch({
+      type: "CHANGE_NODE_LOCATION",
+      payload: {
+        index: parseInt(element.dataset["index"]),
+        location: element.value,
+      },
     });
-    setNodes(newNodes);
   };
 
   return (
@@ -67,7 +63,7 @@ const NodesTable: React.FC = () => {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          onClick={handleAddButtonClick}
+          onClick={() => dispatch({ type: "ADD_NODE" })}
         >
           <path
             strokeLinecap="round"
@@ -94,8 +90,8 @@ const NodesTable: React.FC = () => {
                 <td className="border px-2">{node.id()}</td>
                 <td className="border px-2">
                   <select
-                    name={`${index}`}
                     value={node.type}
+                    data-index={index}
                     onChange={handleTypeChange}
                   >
                     <option value="ExternalEntity">ExternalEntity</option>
@@ -106,27 +102,27 @@ const NodesTable: React.FC = () => {
                 <td className="border px-2">
                   <input
                     type="text"
-                    name={`${index}`}
                     value={node.name}
+                    data-index={index}
                     onChange={handleNameChange}
                   />
                 </td>
                 <td className="border px-2">
                   <input
                     type="text"
-                    name={`${index}`}
                     value={node.location}
+                    data-index={index}
                     onChange={handleLocationChange}
                   />
                 </td>
                 <td className="border px-2">
                   <svg
-                    data-index={index}
                     className="w-4 h-4 cursor-pointer"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
+                    data-index={index}
                     onClick={handleDeleteButtonClick}
                   >
                     <path
