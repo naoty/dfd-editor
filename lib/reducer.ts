@@ -54,6 +54,13 @@ type AddEdgeAction = {
   type: "ADD_EDGE";
 };
 
+type DeleteEdgeAction = {
+  type: "DELETE_EDGE";
+  payload: {
+    index: number;
+  };
+};
+
 type ChangeEdgeFromAction = {
   type: "CHANGE_EDGE_FROM";
   payload: {
@@ -85,6 +92,7 @@ export type Action =
   | ChangeNodeNameAction
   | ChangeNodeLocationAction
   | AddEdgeAction
+  | DeleteEdgeAction
   | ChangeEdgeFromAction
   | ChangeEdgeToAction
   | ChangeEdgeDataAction;
@@ -138,6 +146,11 @@ export const reducer = (state: State, action: Action): State => {
           ...state.edges,
           new Edge(state.nodes[0].id, state.nodes[0].id, ""),
         ],
+      };
+    case "DELETE_EDGE":
+      return {
+        nodes: state.nodes,
+        edges: state.edges.filter((_, index) => index !== action.payload.index),
       };
     case "CHANGE_EDGE_FROM":
       return {

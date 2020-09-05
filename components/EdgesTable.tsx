@@ -16,6 +16,18 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
     </option>
   ));
 
+  const handleDeleteButtonClick = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>
+  ) => {
+    const element = event.currentTarget as SVGSVGElement;
+    dispatch({
+      type: "DELETE_EDGE",
+      payload: {
+        index: parseInt(element.dataset["index"]),
+      },
+    });
+  };
+
   const handleFromChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const element = event.currentTarget as HTMLSelectElement;
     dispatch({
@@ -76,6 +88,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
               <th className="border">From</th>
               <th className="border">To</th>
               <th className="border">Data</th>
+              <th className="border"></th>
             </tr>
           </thead>
           <tbody>
@@ -106,6 +119,24 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
                     data-index={index}
                     onChange={handleDataChange}
                   />
+                </td>
+                <td className="border px-2">
+                  <svg
+                    className="w-4 h-4 cursor-pointer"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    data-index={index}
+                    onClick={handleDeleteButtonClick}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
                 </td>
               </tr>
             ))}
