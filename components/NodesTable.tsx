@@ -77,7 +77,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="border">ID</th>
+              <th className="border">Label</th>
               <th className="border">Type</th>
               <th className="border">Name</th>
               <th className="border">Location</th>
@@ -87,7 +87,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
           <tbody>
             {nodes.map((node, index) => (
               <tr key={index}>
-                <td className="border px-2">{node.id()}</td>
+                <td className="border px-2">{node.label()}</td>
                 <td className="border px-2">
                   <select
                     value={node.type}

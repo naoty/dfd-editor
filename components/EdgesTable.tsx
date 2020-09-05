@@ -12,7 +12,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges }: Props) => {
     event.preventDefault();
   };
 
-  const nodeIds = nodes.map(node => node.id());
+  const nodeLabels = nodes.map(node => node.label());
 
   return (
     <>
@@ -48,15 +48,15 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges }: Props) => {
               <tr key={`${edge.from}-${edge.to}`}>
                 <td className="border px-2">
                   <select value={edge.from}>
-                    {nodeIds.map((id, index) => (
-                      <option key={index}>{id}</option>
+                    {nodeLabels.map((label, index) => (
+                      <option key={index}>{label}</option>
                     ))}
                   </select>
                 </td>
                 <td className="border px-2">
                   <select value={edge.to}>
-                    {nodeIds.map((id, index) => (
-                      <option key={index}>{id}</option>
+                    {nodeLabels.map((label, index) => (
+                      <option key={index}>{label}</option>
                     ))}
                   </select>
                 </td>

@@ -9,7 +9,7 @@ export class Node {
     this.location = location;
   }
 
-  id(): string {
+  label(): string {
     const parts: string[] = [];
     switch (this.type) {
       case NodeType.ExternalEntity:
