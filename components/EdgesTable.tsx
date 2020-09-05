@@ -1,19 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
+import { Edge } from "../lib/edge";
 
-type Edge = {
-  from: string;
-  to: string;
-  data: string;
-};
+interface Props {
+  edges: Edge[];
+}
 
-const EdgesTable: React.FC = () => {
-  const [edges, setEdges] = useState<Edge[]>([
-    { from: "e_user", to: "p_api_sign_up", data: "user params" },
-    { from: "p_api_sign_up", to: "d_mysql_users", data: "user" },
-  ]);
-
+const EdgesTable: React.FC<Props> = ({ edges }: Props) => {
   const handleClick = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    setEdges([...edges, { from: "new node", to: "new node", data: "" }]);
     event.preventDefault();
   };
 

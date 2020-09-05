@@ -1,7 +1,9 @@
 import { Node, NodeType } from "./node";
+import { Edge } from "./edge";
 
 type State = {
   nodes: Node[];
+  edges: Edge[];
 };
 
 export const initialState: State = {
@@ -9,6 +11,10 @@ export const initialState: State = {
     new Node(NodeType.ExternalEntity, "User", ""),
     new Node(NodeType.Process, "API", "/sign_up"),
     new Node(NodeType.Datastore, "MySQL", "users"),
+  ],
+  edges: [
+    new Edge("e_user", "p_api_sign_up", "user params"),
+    new Edge("p_api_sign_up", "d_mysql_users", "user"),
   ],
 };
 
@@ -57,10 +63,14 @@ export type Action =
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_NODE":
-      return { nodes: [...state.nodes, new Node(NodeType.Process, "", "")] };
+      return {
+        nodes: [...state.nodes, new Node(NodeType.Process, "", "")],
+        edges: state.edges,
+      };
     case "DELETE_NODE":
       return {
         nodes: state.nodes.filter((_, index) => index !== action.payload.index),
+        edges: state.edges,
       };
     case "CHANGE_NODE_TYPE":
       return {
@@ -70,6 +80,7 @@ export const reducer = (state: State, action: Action): State => {
           }
           return node;
         }),
+        edges: state.edges,
       };
     case "CHANGE_NODE_NAME":
       return {
@@ -79,6 +90,7 @@ export const reducer = (state: State, action: Action): State => {
           }
           return node;
         }),
+        edges: state.edges,
       };
     case "CHANGE_NODE_LOCATION":
       return {
@@ -88,6 +100,7 @@ export const reducer = (state: State, action: Action): State => {
           }
           return node;
         }),
+        edges: state.edges,
       };
   }
 };

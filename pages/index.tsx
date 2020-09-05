@@ -13,7 +13,7 @@ const Index: React.FC = () => {
       </div>
 
       <div className="col-span-1 row-span-1 row-start-2 border-r">
-        <EdgesTable />
+        <EdgesTable edges={state.edges} />
       </div>
 
       <div className="col-span-2 row-span-2 h-screen">
