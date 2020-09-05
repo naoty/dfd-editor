@@ -61,10 +61,19 @@ const NodesTable: React.FC = () => {
 
   const [editableCellId, setEditableCellId] = useState<string | null>(null);
 
-  const handleButtonClick = () => {
+  const handleAddButtonClick = () => {
     const newNodeIndex = nodes.length;
     setNodes([...nodes, new Node(NodeType.Process, "new node", "")]);
     setEditableCellId(`type_${newNodeIndex}`);
+  };
+
+  const handleDeleteButtonClick = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>
+  ) => {
+    const element = event.currentTarget as SVGSVGElement;
+    const deletedIndex = parseInt(element.dataset["index"]);
+    const newNodes = nodes.filter((_, index) => index !== deletedIndex);
+    setNodes(newNodes);
   };
 
   const handleCellClick = (
@@ -124,7 +133,7 @@ const NodesTable: React.FC = () => {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          onClick={handleButtonClick}
+          onClick={handleAddButtonClick}
         >
           <path
             strokeLinecap="round"
@@ -142,6 +151,7 @@ const NodesTable: React.FC = () => {
               <th className="border">Type</th>
               <th className="border">Name</th>
               <th className="border">Location</th>
+              <th className="border"></th>
             </tr>
           </thead>
           <tbody>
@@ -213,6 +223,24 @@ const NodesTable: React.FC = () => {
                     onChange={handleLocationChange}
                     onBlur={handleCellBlur}
                   />
+                </td>
+                <td className="border px-2">
+                  <svg
+                    data-index={index}
+                    className="w-4 h-4 cursor-pointer"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    onClick={handleDeleteButtonClick}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
                 </td>
               </tr>
             ))}
