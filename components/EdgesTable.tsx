@@ -1,17 +1,15 @@
 import React from "react";
+import { Action } from "../lib/reducer";
 import { Node } from "../lib/node";
 import { Edge } from "../lib/edge";
 
 interface Props {
   nodes: Node[];
   edges: Edge[];
+  dispatch: React.Dispatch<Action>;
 }
 
-const EdgesTable: React.FC<Props> = ({ nodes, edges }: Props) => {
-  const handleClick = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    event.preventDefault();
-  };
-
+const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
   const nodeLabels = nodes.map(node => node.label());
 
   return (
@@ -24,7 +22,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges }: Props) => {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          onClick={handleClick}
+          onClick={() => dispatch({ type: "ADD_EDGE" })}
         >
           <path
             strokeLinecap="round"

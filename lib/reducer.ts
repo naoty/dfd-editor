@@ -53,12 +53,17 @@ type ChangeNodeLocationAction = {
   };
 };
 
+type AddEdgeAction = {
+  type: "ADD_EDGE";
+};
+
 export type Action =
   | AddNodeAction
   | DeleteNodeAction
   | ChangeNodeTypeAction
   | ChangeNodeNameAction
-  | ChangeNodeLocationAction;
+  | ChangeNodeLocationAction
+  | AddEdgeAction;
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -101,6 +106,11 @@ export const reducer = (state: State, action: Action): State => {
           return node;
         }),
         edges: state.edges,
+      };
+    case "ADD_EDGE":
+      return {
+        nodes: state.nodes,
+        edges: [...state.edges, new Edge(null, null, "")],
       };
   }
 };
