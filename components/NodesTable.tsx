@@ -56,6 +56,18 @@ const NodesTable: React.FC = () => {
     setEditableCellId(null);
   };
 
+  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const element = event.target as HTMLSelectElement;
+    const index = parseInt(element.name);
+    const newNodes = nodes.map((node, nodeIndex) => {
+      if (nodeIndex === index) {
+        node.type = NodeType[element.value];
+      }
+      return node;
+    });
+    setNodes(newNodes);
+  };
+
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const element = event.target as HTMLInputElement;
     const index = parseInt(element.name);
@@ -132,7 +144,30 @@ const NodesTable: React.FC = () => {
                     onBlur={handleCellBlur}
                   />
                 </td>
-                <td className="border px-2">{node.type}</td>
+                <td className="border px-2">
+                  <span
+                    id={`type_${index}`}
+                    className={classnames({
+                      hidden: editableCellId === `type_${index}`,
+                    })}
+                    onClick={handleCellClick}
+                  >
+                    {node.type}
+                  </span>
+                  <select
+                    name={`${index}`}
+                    value={node.type}
+                    className={classnames({
+                      hidden: editableCellId !== `type_${index}`,
+                    })}
+                    onBlur={handleCellBlur}
+                    onChange={handleTypeChange}
+                  >
+                    <option value="ExternalEntity">ExternalEntity</option>
+                    <option value="Process">Process</option>
+                    <option value="Datastore">Datastore</option>
+                  </select>
+                </td>
                 <td className="border px-2">
                   <span
                     id={`name_${index}`}
