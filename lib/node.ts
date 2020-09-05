@@ -1,9 +1,13 @@
+import { v4 as uuidv4 } from "uuid";
+
 export class Node {
+  id: string;
   type: string;
   name: string;
   location: string;
 
   constructor(type: NodeType, name: string, location: string) {
+    this.id = uuidv4();
     this.type = type;
     this.name = name;
     this.location = location;
