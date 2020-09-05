@@ -12,10 +12,7 @@ export const initialState: State = {
     new Node(NodeType.Process, "API", "/sign_up"),
     new Node(NodeType.Datastore, "MySQL", "users"),
   ],
-  edges: [
-    new Edge("e_user", "p_api_sign_up", "user params"),
-    new Edge("p_api_sign_up", "d_mysql_users", "user"),
-  ],
+  edges: [],
 };
 
 type AddNodeAction = {

@@ -10,7 +10,11 @@ interface Props {
 }
 
 const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
-  const nodeLabels = nodes.map(node => node.label());
+  const nodeOptions = nodes.map(node => (
+    <option key={node.id} value={node.id}>
+      {node.label()}
+    </option>
+  ));
 
   return (
     <>
@@ -45,18 +49,10 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
             {edges.map(edge => (
               <tr key={`${edge.from}-${edge.to}`}>
                 <td className="border px-2">
-                  <select value={edge.from}>
-                    {nodeLabels.map((label, index) => (
-                      <option key={index}>{label}</option>
-                    ))}
-                  </select>
+                  <select value={edge.from}>{nodeOptions}</select>
                 </td>
                 <td className="border px-2">
-                  <select value={edge.to}>
-                    {nodeLabels.map((label, index) => (
-                      <option key={index}>{label}</option>
-                    ))}
-                  </select>
+                  <select value={edge.to}>{nodeOptions}</select>
                 </td>
                 <td className="border px-2">{edge.data}</td>
               </tr>
