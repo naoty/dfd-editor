@@ -14,7 +14,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
     dispatch({
       type: "DELETE_NODE",
       payload: {
-        index: parseInt(element.dataset["index"]),
+        id: element.dataset["id"],
       },
     });
   };
@@ -24,7 +24,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
     dispatch({
       type: "CHANGE_NODE_TYPE",
       payload: {
-        index: parseInt(element.dataset["index"]),
+        id: element.dataset["id"],
         type: NodeType[element.value],
       },
     });
@@ -35,7 +35,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
     dispatch({
       type: "CHANGE_NODE_NAME",
       payload: {
-        index: parseInt(element.dataset["index"]),
+        id: element.dataset["id"],
         name: element.value,
       },
     });
@@ -46,7 +46,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
     dispatch({
       type: "CHANGE_NODE_LOCATION",
       payload: {
-        index: parseInt(element.dataset["index"]),
+        id: element.dataset["id"],
         location: element.value,
       },
     });
@@ -84,13 +84,13 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {nodes.map((node, index) => (
-              <tr key={index}>
+            {nodes.map(node => (
+              <tr key={node.id}>
                 <td className="border px-2">{node.label}</td>
                 <td className="border px-2">
                   <select
                     value={node.type}
-                    data-index={index}
+                    data-id={node.id}
                     onChange={handleTypeChange}
                   >
                     <option value="ExternalEntity">ExternalEntity</option>
@@ -102,7 +102,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
                   <input
                     type="text"
                     value={node.name}
-                    data-index={index}
+                    data-id={node.id}
                     onChange={handleNameChange}
                   />
                 </td>
@@ -110,7 +110,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
                   <input
                     type="text"
                     value={node.location}
-                    data-index={index}
+                    data-id={node.id}
                     onChange={handleLocationChange}
                   />
                 </td>
@@ -121,7 +121,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    data-index={index}
+                    data-id={node.id}
                     onClick={handleDeleteButtonClick}
                   >
                     <path

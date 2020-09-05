@@ -22,13 +22,17 @@ export type Edge = {
 };
 
 type State = {
-  nodes: Node[];
-  edges: Edge[];
+  nodes: {
+    [key: string]: Node;
+  };
+  edges: {
+    [key: string]: Edge;
+  };
 };
 
 export const initialState: State = {
-  nodes: [],
-  edges: [],
+  nodes: {},
+  edges: {},
 };
 
 type AddNodeAction = {
@@ -38,14 +42,14 @@ type AddNodeAction = {
 type DeleteNodeAction = {
   type: "DELETE_NODE";
   payload: {
-    index: number;
+    id: string;
   };
 };
 
 type ChangeNodeTypeAction = {
   type: "CHANGE_NODE_TYPE";
   payload: {
-    index: number;
+    id: string;
     type: NodeType;
   };
 };
@@ -53,7 +57,7 @@ type ChangeNodeTypeAction = {
 type ChangeNodeNameAction = {
   type: "CHANGE_NODE_NAME";
   payload: {
-    index: number;
+    id: string;
     name: string;
   };
 };
@@ -61,7 +65,7 @@ type ChangeNodeNameAction = {
 type ChangeNodeLocationAction = {
   type: "CHANGE_NODE_LOCATION";
   payload: {
-    index: number;
+    id: string;
     location: string;
   };
 };
@@ -73,14 +77,14 @@ type AddEdgeAction = {
 type DeleteEdgeAction = {
   type: "DELETE_EDGE";
   payload: {
-    index: number;
+    id: string;
   };
 };
 
 type ChangeEdgeFromAction = {
   type: "CHANGE_EDGE_FROM";
   payload: {
-    index: number;
+    id: string;
     from: string;
   };
 };
@@ -88,7 +92,7 @@ type ChangeEdgeFromAction = {
 type ChangeEdgeToAction = {
   type: "CHANGE_EDGE_TO";
   payload: {
-    index: number;
+    id: string;
     to: string;
   };
 };
@@ -96,7 +100,7 @@ type ChangeEdgeToAction = {
 type ChangeEdgeDataAction = {
   type: "CHANGE_EDGE_DATA";
   payload: {
-    index: number;
+    id: string;
     data: string;
   };
 };
@@ -115,105 +119,137 @@ export type Action =
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "ADD_NODE":
+    case "ADD_NODE": {
+      const newId = uuidv4();
       return {
-        nodes: [
+        ...state,
+        nodes: {
           ...state.nodes,
-          {
-            id: uuidv4(),
+          [newId]: {
+            id: newId,
             type: NodeType.Process,
             name: "",
             location: "",
             label: generateLabel(NodeType.Process, "", ""),
           },
-        ],
-        edges: state.edges,
+        },
       };
+    }
     case "DELETE_NODE":
       return {
-        nodes: state.nodes.filter((_, index) => index !== action.payload.index),
-        edges: state.edges,
+        ...state,
+        nodes: Object.keys(state.nodes)
+          .filter(id => id !== action.payload.id)
+          .reduce((nodes, id) => {
+            nodes[id] = state.nodes[id];
+            return nodes;
+          }, {}),
       };
     case "CHANGE_NODE_TYPE":
       return {
-        nodes: state.nodes.map((node, index) => {
-          if (index === action.payload.index) {
-            node.type = action.payload.type;
-            node.label = generateLabel(node.type, node.name, node.location);
-          }
-          return node;
-        }),
-        edges: state.edges,
+        ...state,
+        nodes: {
+          ...state.nodes,
+          [action.payload.id]: {
+            ...state.nodes[action.payload.id],
+            type: NodeType[action.payload.type],
+            label: generateLabel(
+              NodeType[action.payload.type],
+              state.nodes[action.payload.id].name,
+              state.nodes[action.payload.id].location
+            ),
+          },
+        },
       };
     case "CHANGE_NODE_NAME":
       return {
-        nodes: state.nodes.map((node, index) => {
-          if (index === action.payload.index) {
-            node.name = action.payload.name;
-            node.label = generateLabel(node.type, node.name, node.location);
-          }
-          return node;
-        }),
-        edges: state.edges,
+        ...state,
+        nodes: {
+          ...state.nodes,
+          [action.payload.id]: {
+            ...state.nodes[action.payload.id],
+            name: action.payload.name,
+            label: generateLabel(
+              state.nodes[action.payload.id].type,
+              action.payload.name,
+              state.nodes[action.payload.id].location
+            ),
+          },
+        },
       };
     case "CHANGE_NODE_LOCATION":
       return {
-        nodes: state.nodes.map((node, index) => {
-          if (index === action.payload.index) {
-            node.location = action.payload.location;
-            node.label = generateLabel(node.type, node.name, node.location);
-          }
-          return node;
-        }),
-        edges: state.edges,
+        ...state,
+        nodes: {
+          ...state.nodes,
+          [action.payload.id]: {
+            ...state.nodes[action.payload.id],
+            location: action.payload.location,
+            label: generateLabel(
+              state.nodes[action.payload.id].type,
+              state.nodes[action.payload.id].name,
+              action.payload.location
+            ),
+          },
+        },
       };
-    case "ADD_EDGE":
+    case "ADD_EDGE": {
+      const newId = uuidv4();
       return {
-        nodes: state.nodes,
-        edges: [
+        ...state,
+        edges: {
           ...state.edges,
-          {
-            id: uuidv4(),
-            from: state.nodes[0].id,
-            to: state.nodes[0].id,
+          [newId]: {
+            id: newId,
+            from: Object.keys(state.nodes)[0],
+            to: Object.keys(state.nodes)[0],
             data: "",
           },
-        ],
+        },
       };
+    }
     case "DELETE_EDGE":
       return {
-        nodes: state.nodes,
-        edges: state.edges.filter((_, index) => index !== action.payload.index),
+        ...state,
+        edges: Object.keys(state.edges)
+          .filter(id => id !== action.payload.id)
+          .reduce((edges, id) => {
+            edges[id] = state.edges[id];
+            return edges;
+          }, {}),
       };
     case "CHANGE_EDGE_FROM":
       return {
-        nodes: state.nodes,
-        edges: state.edges.map((edge, index) => {
-          if (index === action.payload.index) {
-            edge.from = action.payload.from;
-          }
-          return edge;
-        }),
+        ...state,
+        edges: {
+          ...state.edges,
+          [action.payload.id]: {
+            ...state.edges[action.payload.id],
+            from: action.payload.from,
+          },
+        },
       };
     case "CHANGE_EDGE_TO":
       return {
-        nodes: state.nodes,
-        edges: state.edges.map((edge, index) => {
-          if (index === action.payload.index) {
-            edge.to = action.payload.to;
-          }
-          return edge;
-        }),
+        ...state,
+        edges: {
+          ...state.edges,
+          [action.payload.id]: {
+            ...state.edges[action.payload.id],
+            to: action.payload.to,
+          },
+        },
       };
     case "CHANGE_EDGE_DATA":
       return {
-        nodes: state.nodes,
-        edges: state.edges.map((edge, index) => {
-          if (index === action.payload.index) {
-            edge.data = action.payload.data;
-          }
-          return edge;
-        }),
+        ...state,
+        edges: {
+          ...state.edges,
+          [action.payload.id]: {
+            ...state.edges[action.payload.id],
+            data: action.payload.data,
+          },
+        },
       };
   }
 };

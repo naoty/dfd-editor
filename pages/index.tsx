@@ -9,13 +9,13 @@ const Index: React.FC = () => {
   return (
     <main className="grid grid-cols-3 grid-rows-2">
       <div className="col-span-1 row-span-1 border-r border-b">
-        <NodesTable nodes={state.nodes} dispatch={dispatch} />
+        <NodesTable nodes={Object.values(state.nodes)} dispatch={dispatch} />
       </div>
 
       <div className="col-span-1 row-span-1 row-start-2 border-r">
         <EdgesTable
-          nodes={state.nodes}
-          edges={state.edges}
+          nodes={Object.values(state.nodes)}
+          edges={Object.values(state.edges)}
           dispatch={dispatch}
         />
       </div>

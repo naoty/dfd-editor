@@ -21,7 +21,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
     dispatch({
       type: "DELETE_EDGE",
       payload: {
-        index: parseInt(element.dataset["index"]),
+        id: element.dataset["id"],
       },
     });
   };
@@ -31,7 +31,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
     dispatch({
       type: "CHANGE_EDGE_FROM",
       payload: {
-        index: parseInt(element.dataset["index"]),
+        id: element.dataset["id"],
         from: element.value,
       },
     });
@@ -42,7 +42,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
     dispatch({
       type: "CHANGE_EDGE_TO",
       payload: {
-        index: parseInt(element.dataset["index"]),
+        id: element.dataset["id"],
         to: element.value,
       },
     });
@@ -53,7 +53,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
     dispatch({
       type: "CHANGE_EDGE_DATA",
       payload: {
-        index: parseInt(element.dataset["index"]),
+        id: element.dataset["id"],
         data: element.value,
       },
     });
@@ -90,12 +90,12 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {edges.map((edge, index) => (
-              <tr key={index}>
+            {edges.map(edge => (
+              <tr key={edge.id}>
                 <td className="border px-2">
                   <select
                     value={edge.from}
-                    data-index={index}
+                    data-id={edge.id}
                     onChange={handleFromChange}
                   >
                     {nodeOptions}
@@ -104,7 +104,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
                 <td className="border px-2">
                   <select
                     value={edge.to}
-                    data-index={index}
+                    data-id={edge.id}
                     onChange={handleToChange}
                   >
                     {nodeOptions}
@@ -114,7 +114,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
                   <input
                     type="text"
                     value={edge.data}
-                    data-index={index}
+                    data-id={edge.id}
                     onChange={handleDataChange}
                   />
                 </td>
@@ -125,7 +125,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    data-index={index}
+                    data-id={edge.id}
                     onClick={handleDeleteButtonClick}
                   >
                     <path
