@@ -54,13 +54,40 @@ type AddEdgeAction = {
   type: "ADD_EDGE";
 };
 
+type ChangeEdgeFromAction = {
+  type: "CHANGE_EDGE_FROM";
+  payload: {
+    index: number;
+    from: string;
+  };
+};
+
+type ChangeEdgeToAction = {
+  type: "CHANGE_EDGE_TO";
+  payload: {
+    index: number;
+    to: string;
+  };
+};
+
+type ChangeEdgeDataAction = {
+  type: "CHANGE_EDGE_DATA";
+  payload: {
+    index: number;
+    data: string;
+  };
+};
+
 export type Action =
   | AddNodeAction
   | DeleteNodeAction
   | ChangeNodeTypeAction
   | ChangeNodeNameAction
   | ChangeNodeLocationAction
-  | AddEdgeAction;
+  | AddEdgeAction
+  | ChangeEdgeFromAction
+  | ChangeEdgeToAction
+  | ChangeEdgeDataAction;
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -107,7 +134,40 @@ export const reducer = (state: State, action: Action): State => {
     case "ADD_EDGE":
       return {
         nodes: state.nodes,
-        edges: [...state.edges, new Edge(null, null, "")],
+        edges: [
+          ...state.edges,
+          new Edge(state.nodes[0].id, state.nodes[0].id, ""),
+        ],
+      };
+    case "CHANGE_EDGE_FROM":
+      return {
+        nodes: state.nodes,
+        edges: state.edges.map((edge, index) => {
+          if (index === action.payload.index) {
+            edge.from = action.payload.from;
+          }
+          return edge;
+        }),
+      };
+    case "CHANGE_EDGE_TO":
+      return {
+        nodes: state.nodes,
+        edges: state.edges.map((edge, index) => {
+          if (index === action.payload.index) {
+            edge.to = action.payload.to;
+          }
+          return edge;
+        }),
+      };
+    case "CHANGE_EDGE_DATA":
+      return {
+        nodes: state.nodes,
+        edges: state.edges.map((edge, index) => {
+          if (index === action.payload.index) {
+            edge.data = action.payload.data;
+          }
+          return edge;
+        }),
       };
   }
 };

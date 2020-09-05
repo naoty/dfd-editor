@@ -16,6 +16,39 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
     </option>
   ));
 
+  const handleFromChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const element = event.currentTarget as HTMLSelectElement;
+    dispatch({
+      type: "CHANGE_EDGE_FROM",
+      payload: {
+        index: parseInt(element.dataset["index"]),
+        from: element.value,
+      },
+    });
+  };
+
+  const handleToChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const element = event.currentTarget as HTMLSelectElement;
+    dispatch({
+      type: "CHANGE_EDGE_TO",
+      payload: {
+        index: parseInt(element.dataset["index"]),
+        to: element.value,
+      },
+    });
+  };
+
+  const handleDataChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const element = event.currentTarget as HTMLInputElement;
+    dispatch({
+      type: "CHANGE_EDGE_DATA",
+      payload: {
+        index: parseInt(element.dataset["index"]),
+        data: element.value,
+      },
+    });
+  };
+
   return (
     <>
       <div className="flex flex-row">
@@ -46,15 +79,34 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {edges.map(edge => (
-              <tr key={`${edge.from}-${edge.to}`}>
+            {edges.map((edge, index) => (
+              <tr key={index}>
                 <td className="border px-2">
-                  <select value={edge.from}>{nodeOptions}</select>
+                  <select
+                    value={edge.from}
+                    data-index={index}
+                    onChange={handleFromChange}
+                  >
+                    {nodeOptions}
+                  </select>
                 </td>
                 <td className="border px-2">
-                  <select value={edge.to}>{nodeOptions}</select>
+                  <select
+                    value={edge.to}
+                    data-index={index}
+                    onChange={handleToChange}
+                  >
+                    {nodeOptions}
+                  </select>
                 </td>
-                <td className="border px-2">{edge.data}</td>
+                <td className="border px-2">
+                  <input
+                    type="text"
+                    value={edge.data}
+                    data-index={index}
+                    onChange={handleDataChange}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
