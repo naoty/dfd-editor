@@ -1,12 +1,50 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 
-type Node = {
-  id: string;
-  type: NodeType | null;
+class Node {
+  type: string;
   name: string;
-  location: string | null;
-};
+  location: string;
+
+  constructor(type: NodeType, name: string, location: string) {
+    this.type = type;
+    this.name = name;
+    this.location = location;
+  }
+
+  id(): string {
+    const parts: string[] = [];
+    switch (this.type) {
+      case NodeType.ExternalEntity:
+        parts.push("e");
+        break;
+      case NodeType.Process:
+        parts.push("p");
+        break;
+      case NodeType.Datastore:
+        parts.push("d");
+        break;
+    }
+
+    if (this.name !== "") {
+      const name = this.name
+        .toLowerCase()
+        .replace(/[/]/, "")
+        .replace(/\s/, "_");
+      parts.push(name);
+    }
+
+    if (this.location !== "") {
+      const location = this.location
+        .toLowerCase()
+        .replace(/[/]/, "")
+        .replace(/\s/, "_");
+      parts.push(location);
+    }
+
+    return parts.join("_");
+  }
+}
 
 enum NodeType {
   ExternalEntity = "ExternalEntity",
@@ -16,33 +54,15 @@ enum NodeType {
 
 const NodesTable: React.FC = () => {
   const [nodes, setNodes] = useState<Node[]>([
-    {
-      id: "e_user",
-      type: NodeType.ExternalEntity,
-      name: "User",
-      location: null,
-    },
-    {
-      id: "p_api_sign_up",
-      type: NodeType.Process,
-      name: "API",
-      location: "/sign_up",
-    },
-    {
-      id: "d_mysql_users",
-      type: NodeType.Datastore,
-      name: "MySQL",
-      location: "users",
-    },
+    new Node(NodeType.ExternalEntity, "User", ""),
+    new Node(NodeType.Process, "API", "/sign_up"),
+    new Node(NodeType.Datastore, "MySQL", "users"),
   ]);
 
   const [editableCellId, setEditableCellId] = useState<string | null>(null);
 
   const handleButtonClick = () => {
-    setNodes([
-      ...nodes,
-      { id: "new nodes", type: null, name: "", location: null },
-    ]);
+    setNodes([...nodes, new Node(NodeType.Process, "new node", "")]);
   };
 
   const handleCellClick = (
@@ -124,26 +144,8 @@ const NodesTable: React.FC = () => {
           </thead>
           <tbody>
             {nodes.map((node, index) => (
-              <tr key={node.id}>
-                <td className="border px-2">
-                  <span
-                    id={`id_${index}`}
-                    className={classnames({
-                      hidden: editableCellId === `id_${index}`,
-                    })}
-                    onClick={handleCellClick}
-                  >
-                    {node.id}
-                  </span>
-                  <input
-                    type="text"
-                    value={node.id}
-                    className={classnames({
-                      hidden: editableCellId !== `id_${index}`,
-                    })}
-                    onBlur={handleCellBlur}
-                  />
-                </td>
+              <tr key={index}>
+                <td className="border px-2">{node.id()}</td>
                 <td className="border px-2">
                   <span
                     id={`type_${index}`}
