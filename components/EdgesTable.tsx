@@ -1,14 +1,18 @@
 import React from "react";
+import { Node } from "../lib/node";
 import { Edge } from "../lib/edge";
 
 interface Props {
+  nodes: Node[];
   edges: Edge[];
 }
 
-const EdgesTable: React.FC<Props> = ({ edges }: Props) => {
+const EdgesTable: React.FC<Props> = ({ nodes, edges }: Props) => {
   const handleClick = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     event.preventDefault();
   };
+
+  const nodeIds = nodes.map(node => node.id());
 
   return (
     <>
@@ -42,8 +46,20 @@ const EdgesTable: React.FC<Props> = ({ edges }: Props) => {
           <tbody>
             {edges.map(edge => (
               <tr key={`${edge.from}-${edge.to}`}>
-                <td className="border px-2">{edge.from}</td>
-                <td className="border px-2">{edge.to}</td>
+                <td className="border px-2">
+                  <select value={edge.from}>
+                    {nodeIds.map((id, index) => (
+                      <option key={index}>{id}</option>
+                    ))}
+                  </select>
+                </td>
+                <td className="border px-2">
+                  <select value={edge.to}>
+                    {nodeIds.map((id, index) => (
+                      <option key={index}>{id}</option>
+                    ))}
+                  </select>
+                </td>
                 <td className="border px-2">{edge.data}</td>
               </tr>
             ))}
