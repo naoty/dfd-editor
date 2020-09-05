@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import classnames from "classnames";
 
 class Node {
   type: string;
@@ -59,12 +58,8 @@ const NodesTable: React.FC = () => {
     new Node(NodeType.Datastore, "MySQL", "users"),
   ]);
 
-  const [editableCellId, setEditableCellId] = useState<string | null>(null);
-
   const handleAddButtonClick = () => {
-    const newNodeIndex = nodes.length;
     setNodes([...nodes, new Node(NodeType.Process, "new node", "")]);
-    setEditableCellId(`type_${newNodeIndex}`);
   };
 
   const handleDeleteButtonClick = (
@@ -74,17 +69,6 @@ const NodesTable: React.FC = () => {
     const deletedIndex = parseInt(element.dataset["index"]);
     const newNodes = nodes.filter((_, index) => index !== deletedIndex);
     setNodes(newNodes);
-  };
-
-  const handleCellClick = (
-    event: React.MouseEvent<HTMLTableDataCellElement, MouseEvent>
-  ) => {
-    const element = event.target as HTMLElement;
-    setEditableCellId(element.id);
-  };
-
-  const handleCellBlur = () => {
-    setEditableCellId(null);
   };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -159,22 +143,9 @@ const NodesTable: React.FC = () => {
               <tr key={index}>
                 <td className="border px-2">{node.id()}</td>
                 <td className="border px-2">
-                  <span
-                    id={`type_${index}`}
-                    className={classnames({
-                      hidden: editableCellId === `type_${index}`,
-                    })}
-                    onClick={handleCellClick}
-                  >
-                    {node.type}
-                  </span>
                   <select
                     name={`${index}`}
                     value={node.type}
-                    className={classnames({
-                      hidden: editableCellId !== `type_${index}`,
-                    })}
-                    onBlur={handleCellBlur}
                     onChange={handleTypeChange}
                   >
                     <option value="ExternalEntity">ExternalEntity</option>
@@ -183,45 +154,19 @@ const NodesTable: React.FC = () => {
                   </select>
                 </td>
                 <td className="border px-2">
-                  <span
-                    id={`name_${index}`}
-                    className={classnames({
-                      hidden: editableCellId === `name_${index}`,
-                    })}
-                    onClick={handleCellClick}
-                  >
-                    {node.name}
-                  </span>
                   <input
                     type="text"
                     name={`${index}`}
                     value={node.name}
-                    className={classnames({
-                      hidden: editableCellId !== `name_${index}`,
-                    })}
                     onChange={handleNameChange}
-                    onBlur={handleCellBlur}
                   />
                 </td>
                 <td className="border px-2">
-                  <span
-                    id={`location_${index}`}
-                    className={classnames({
-                      hidden: editableCellId === `location_${index}`,
-                    })}
-                    onClick={handleCellClick}
-                  >
-                    {node.location}
-                  </span>
                   <input
                     type="text"
                     name={`${index}`}
                     value={node.location}
-                    className={classnames({
-                      hidden: editableCellId !== `location_${index}`,
-                    })}
                     onChange={handleLocationChange}
-                    onBlur={handleCellBlur}
                   />
                 </td>
                 <td className="border px-2">
