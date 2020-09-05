@@ -1,6 +1,5 @@
 import React from "react";
-import { Node, NodeType } from "../lib/node";
-import { Action } from "../lib/reducer";
+import { Node, NodeType, Action } from "../lib/reducer";
 
 interface Props {
   nodes: Node[];
@@ -87,7 +86,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
           <tbody>
             {nodes.map((node, index) => (
               <tr key={index}>
-                <td className="border px-2">{node.label()}</td>
+                <td className="border px-2">{node.label}</td>
                 <td className="border px-2">
                   <select
                     value={node.type}

@@ -1,5 +1,25 @@
-import { Node, NodeType } from "./node";
-import { Edge } from "./edge";
+import { v4 as uuidv4 } from "uuid";
+
+export type Node = {
+  id: string;
+  label: string;
+  type: NodeType;
+  name: string;
+  location: string;
+};
+
+export enum NodeType {
+  ExternalEntity = "ExternalEntity",
+  Process = "Process",
+  Datastore = "Datastore",
+}
+
+export type Edge = {
+  id: string;
+  from: string;
+  to: string;
+  data: string;
+};
 
 type State = {
   nodes: Node[];
@@ -7,11 +27,7 @@ type State = {
 };
 
 export const initialState: State = {
-  nodes: [
-    new Node(NodeType.ExternalEntity, "User", ""),
-    new Node(NodeType.Process, "API", "/sign_up"),
-    new Node(NodeType.Datastore, "MySQL", "users"),
-  ],
+  nodes: [],
   edges: [],
 };
 
@@ -101,7 +117,16 @@ export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_NODE":
       return {
-        nodes: [...state.nodes, new Node(NodeType.Process, "", "")],
+        nodes: [
+          ...state.nodes,
+          {
+            id: uuidv4(),
+            type: NodeType.Process,
+            name: "",
+            location: "",
+            label: generateLabel(NodeType.Process, "", ""),
+          },
+        ],
         edges: state.edges,
       };
     case "DELETE_NODE":
@@ -114,6 +139,7 @@ export const reducer = (state: State, action: Action): State => {
         nodes: state.nodes.map((node, index) => {
           if (index === action.payload.index) {
             node.type = action.payload.type;
+            node.label = generateLabel(node.type, node.name, node.location);
           }
           return node;
         }),
@@ -124,6 +150,7 @@ export const reducer = (state: State, action: Action): State => {
         nodes: state.nodes.map((node, index) => {
           if (index === action.payload.index) {
             node.name = action.payload.name;
+            node.label = generateLabel(node.type, node.name, node.location);
           }
           return node;
         }),
@@ -134,6 +161,7 @@ export const reducer = (state: State, action: Action): State => {
         nodes: state.nodes.map((node, index) => {
           if (index === action.payload.index) {
             node.location = action.payload.location;
+            node.label = generateLabel(node.type, node.name, node.location);
           }
           return node;
         }),
@@ -144,7 +172,12 @@ export const reducer = (state: State, action: Action): State => {
         nodes: state.nodes,
         edges: [
           ...state.edges,
-          new Edge(state.nodes[0].id, state.nodes[0].id, ""),
+          {
+            id: uuidv4(),
+            from: state.nodes[0].id,
+            to: state.nodes[0].id,
+            data: "",
+          },
         ],
       };
     case "DELETE_EDGE":
@@ -183,4 +216,41 @@ export const reducer = (state: State, action: Action): State => {
         }),
       };
   }
+};
+
+const generateLabel = (
+  type: NodeType,
+  name: string,
+  location: string
+): string => {
+  const parts: string[] = [];
+  switch (type) {
+    case NodeType.ExternalEntity:
+      parts.push("e");
+      break;
+    case NodeType.Process:
+      parts.push("p");
+      break;
+    case NodeType.Datastore:
+      parts.push("d");
+      break;
+  }
+
+  if (name !== "") {
+    const normalizedName = name
+      .toLowerCase()
+      .replace(/[/]/, "")
+      .replace(/\s/, "_");
+    parts.push(normalizedName);
+  }
+
+  if (location !== "") {
+    const normalizedLocation = location
+      .toLowerCase()
+      .replace(/[/]/, "")
+      .replace(/\s/, "_");
+    parts.push(normalizedLocation);
+  }
+
+  return parts.join("_");
 };

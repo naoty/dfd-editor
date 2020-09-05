@@ -1,7 +1,5 @@
 import React from "react";
-import { Action } from "../lib/reducer";
-import { Node } from "../lib/node";
-import { Edge } from "../lib/edge";
+import { Node, Edge, Action } from "../lib/reducer";
 
 interface Props {
   nodes: Node[];
@@ -12,7 +10,7 @@ interface Props {
 const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
   const nodeOptions = nodes.map(node => (
     <option key={node.id} value={node.id}>
-      {node.label()}
+      {node.label}
     </option>
   ));
 
