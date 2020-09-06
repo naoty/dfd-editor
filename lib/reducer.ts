@@ -28,11 +28,13 @@ type State = {
   edges: {
     [key: string]: Edge;
   };
+  text: string;
 };
 
 export const initialState: State = {
   nodes: {},
   edges: {},
+  text: "graph TD",
 };
 
 type AddNodeAction = {
@@ -121,136 +123,134 @@ export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_NODE": {
       const newId = uuidv4();
-      return {
-        ...state,
-        nodes: {
-          ...state.nodes,
-          [newId]: {
-            id: newId,
-            type: NodeType.Process,
-            name: "",
-            location: "",
-            label: generateLabel(NodeType.Process, "", ""),
-          },
+      const nodes = {
+        ...state.nodes,
+        [newId]: {
+          id: newId,
+          type: NodeType.Process,
+          name: "",
+          location: "",
+          label: generateLabel(NodeType.Process, "", ""),
         },
       };
+      const text = generateText(nodes, state.edges);
+      return { ...state, nodes, text };
     }
-    case "DELETE_NODE":
-      return {
-        ...state,
-        nodes: Object.keys(state.nodes)
-          .filter(id => id !== action.payload.id)
-          .reduce((nodes, id) => {
-            nodes[id] = state.nodes[id];
-            return nodes;
-          }, {}),
-      };
-    case "CHANGE_NODE_TYPE":
-      return {
-        ...state,
-        nodes: {
-          ...state.nodes,
-          [action.payload.id]: {
-            ...state.nodes[action.payload.id],
-            type: NodeType[action.payload.type],
-            label: generateLabel(
-              NodeType[action.payload.type],
-              state.nodes[action.payload.id].name,
-              state.nodes[action.payload.id].location
-            ),
-          },
+    case "DELETE_NODE": {
+      const nodes = Object.keys(state.nodes)
+        .filter(id => id !== action.payload.id)
+        .reduce((nodes, id) => {
+          nodes[id] = state.nodes[id];
+          return nodes;
+        }, {});
+      const text = generateText(nodes, state.edges);
+      return { ...state, nodes, text };
+    }
+    case "CHANGE_NODE_TYPE": {
+      const nodes = {
+        ...state.nodes,
+        [action.payload.id]: {
+          ...state.nodes[action.payload.id],
+          type: NodeType[action.payload.type],
+          label: generateLabel(
+            NodeType[action.payload.type],
+            state.nodes[action.payload.id].name,
+            state.nodes[action.payload.id].location
+          ),
         },
       };
-    case "CHANGE_NODE_NAME":
-      return {
-        ...state,
-        nodes: {
-          ...state.nodes,
-          [action.payload.id]: {
-            ...state.nodes[action.payload.id],
-            name: action.payload.name,
-            label: generateLabel(
-              state.nodes[action.payload.id].type,
-              action.payload.name,
-              state.nodes[action.payload.id].location
-            ),
-          },
+      const text = generateText(nodes, state.edges);
+      return { ...state, nodes, text };
+    }
+    case "CHANGE_NODE_NAME": {
+      const nodes = {
+        ...state.nodes,
+        [action.payload.id]: {
+          ...state.nodes[action.payload.id],
+          name: action.payload.name,
+          label: generateLabel(
+            state.nodes[action.payload.id].type,
+            action.payload.name,
+            state.nodes[action.payload.id].location
+          ),
         },
       };
-    case "CHANGE_NODE_LOCATION":
-      return {
-        ...state,
-        nodes: {
-          ...state.nodes,
-          [action.payload.id]: {
-            ...state.nodes[action.payload.id],
-            location: action.payload.location,
-            label: generateLabel(
-              state.nodes[action.payload.id].type,
-              state.nodes[action.payload.id].name,
-              action.payload.location
-            ),
-          },
+      const text = generateText(nodes, state.edges);
+      return { ...state, nodes, text };
+    }
+    case "CHANGE_NODE_LOCATION": {
+      const nodes = {
+        ...state.nodes,
+        [action.payload.id]: {
+          ...state.nodes[action.payload.id],
+          location: action.payload.location,
+          label: generateLabel(
+            state.nodes[action.payload.id].type,
+            state.nodes[action.payload.id].name,
+            action.payload.location
+          ),
         },
       };
+      const text = generateText(nodes, state.edges);
+      return { ...state, nodes, text };
+    }
     case "ADD_EDGE": {
       const newId = uuidv4();
-      return {
-        ...state,
-        edges: {
-          ...state.edges,
-          [newId]: {
-            id: newId,
-            from: Object.keys(state.nodes)[0],
-            to: Object.keys(state.nodes)[0],
-            data: "",
-          },
+      const edges = {
+        ...state.edges,
+        [newId]: {
+          id: newId,
+          from: Object.keys(state.nodes)[0],
+          to: Object.keys(state.nodes)[0],
+          data: "",
         },
       };
+      const text = generateText(state.nodes, edges);
+      return { ...state, edges, text };
     }
-    case "DELETE_EDGE":
-      return {
-        ...state,
-        edges: Object.keys(state.edges)
-          .filter(id => id !== action.payload.id)
-          .reduce((edges, id) => {
-            edges[id] = state.edges[id];
-            return edges;
-          }, {}),
-      };
-    case "CHANGE_EDGE_FROM":
-      return {
-        ...state,
-        edges: {
-          ...state.edges,
-          [action.payload.id]: {
-            ...state.edges[action.payload.id],
-            from: action.payload.from,
-          },
+    case "DELETE_EDGE": {
+      const edges = Object.keys(state.edges)
+        .filter(id => id !== action.payload.id)
+        .reduce((edges, id) => {
+          edges[id] = state.edges[id];
+          return edges;
+        }, {});
+      const text = generateText(state.nodes, edges);
+      return { ...state, edges, text };
+    }
+    case "CHANGE_EDGE_FROM": {
+      const edges = {
+        ...state.edges,
+        [action.payload.id]: {
+          ...state.edges[action.payload.id],
+          from: action.payload.from,
         },
       };
-    case "CHANGE_EDGE_TO":
-      return {
-        ...state,
-        edges: {
-          ...state.edges,
-          [action.payload.id]: {
-            ...state.edges[action.payload.id],
-            to: action.payload.to,
-          },
+      const text = generateText(state.nodes, edges);
+      return { ...state, edges, text };
+    }
+    case "CHANGE_EDGE_TO": {
+      const edges = {
+        ...state.edges,
+        [action.payload.id]: {
+          ...state.edges[action.payload.id],
+          to: action.payload.to,
         },
       };
-    case "CHANGE_EDGE_DATA":
-      return {
-        ...state,
-        edges: {
-          ...state.edges,
-          [action.payload.id]: {
-            ...state.edges[action.payload.id],
-            data: action.payload.data,
-          },
+      const text = generateText(state.nodes, edges);
+      return { ...state, edges, text };
+    }
+    case "CHANGE_EDGE_DATA": {
+      const edges = {
+        ...state.edges,
+        [action.payload.id]: {
+          ...state.edges[action.payload.id],
+          data: action.payload.data,
         },
       };
+      const text = generateText(state.nodes, edges);
+      return { ...state, edges, text };
+    }
   }
 };
 
@@ -289,4 +289,55 @@ const generateLabel = (
   }
 
   return parts.join("_");
+};
+
+const generateText = (
+  nodes: { [key: string]: Node },
+  edges: { [key: string]: Edge }
+): string => {
+  const indent = "  ";
+
+  const nodeTexts = Object.values(nodes).map(node => {
+    let brackets: string[];
+    switch (node.type) {
+      case NodeType.ExternalEntity:
+        brackets = ["[", "]"];
+        break;
+      case NodeType.Process:
+        brackets = ["(", ")"];
+        break;
+      case NodeType.Datastore:
+        brackets = ["[(", ")]"];
+        break;
+    }
+
+    let text = `${indent}${node.label}`;
+
+    if (node.name !== "") {
+      text += `${brackets[0]}"${node.name}`;
+    }
+
+    if (node.location !== "") {
+      text += `<br>(${node.location})`;
+    }
+
+    if (node.name !== "") {
+      text += `"${brackets[1]}`;
+    }
+
+    return text;
+  });
+
+  const edgeTexts = Object.values(edges).map(edge => {
+    const fromLabel = nodes[edge.from]?.label;
+    const toLabel = nodes[edge.to]?.label;
+
+    if (edge.data === "") {
+      return `${indent}${fromLabel} --> ${toLabel}`;
+    } else {
+      return `${indent}${fromLabel} -- ${edge.data} --> ${toLabel}`;
+    }
+  });
+
+  return ["graph TD", ...nodeTexts, "", ...edgeTexts].join("\n");
 };

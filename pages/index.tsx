@@ -30,7 +30,7 @@ const Index: React.FC = () => {
           </TabList>
 
           <TabPanel>
-            <Editor nodes={state.nodes} edges={state.edges} />
+            <Editor text={state.text} />
           </TabPanel>
 
           <TabPanel>
