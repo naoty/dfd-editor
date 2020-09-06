@@ -1,4 +1,6 @@
 import "../styles/index.css";
+import "react-tabs/style/react-tabs.css";
+
 import { AppProps } from "next/app";
 import React, { ReactElement } from "react";
 

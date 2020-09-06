@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import { initialState, reducer } from "../lib/reducer";
 import EdgesTable from "../components/EdgesTable";
 import NodesTable from "../components/NodesTable";
@@ -22,7 +23,20 @@ const Index: React.FC = () => {
       </div>
 
       <div className="col-span-2 row-span-2 h-screen">
-        <Editor nodes={state.nodes} edges={state.edges} />
+        <Tabs>
+          <TabList>
+            <Tab>Editor</Tab>
+            <Tab>Graph</Tab>
+          </TabList>
+
+          <TabPanel>
+            <Editor nodes={state.nodes} edges={state.edges} />
+          </TabPanel>
+
+          <TabPanel>
+            <h1>Here is graph</h1>
+          </TabPanel>
+        </Tabs>
       </div>
     </main>
   );
