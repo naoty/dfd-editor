@@ -2,6 +2,7 @@ import React, { useReducer } from "react";
 import { initialState, reducer } from "../lib/reducer";
 import EdgesTable from "../components/EdgesTable";
 import NodesTable from "../components/NodesTable";
+import Editor from "../components/Editor";
 
 const Index: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -21,7 +22,7 @@ const Index: React.FC = () => {
       </div>
 
       <div className="col-span-2 row-span-2 h-screen">
-        <h1 className="text-4xl">Here is right</h1>
+        <Editor nodes={state.nodes} edges={state.edges} />
       </div>
     </main>
   );
