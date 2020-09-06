@@ -9,6 +9,7 @@ const Editor: React.FC<Props> = ({ text }: Props) => {
     <textarea
       className="w-full h-full font-mono"
       value={text}
+      rows={text.split("\n").length}
       readOnly={true}
     />
   );
