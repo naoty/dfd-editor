@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import dynamic from "next/dynamic";
-import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
+import { Tabs, TabList, Tab, TabPanel, resetIdCounter } from "react-tabs";
 import { initialState, reducer } from "../lib/reducer";
 import EdgesTable from "../components/EdgesTable";
 import NodesTable from "../components/NodesTable";
@@ -10,6 +10,8 @@ const Diagram = dynamic(() => import("../components/Diagram"), { ssr: false });
 
 const Index: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  resetIdCounter();
 
   return (
     <main className="grid grid-cols-3 grid-rows-2">
