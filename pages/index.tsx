@@ -1,9 +1,12 @@
 import React, { useReducer } from "react";
+import dynamic from "next/dynamic";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import { initialState, reducer } from "../lib/reducer";
 import EdgesTable from "../components/EdgesTable";
 import NodesTable from "../components/NodesTable";
 import Editor from "../components/Editor";
+
+const Diagram = dynamic(() => import("../components/Diagram"), { ssr: false });
 
 const Index: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -25,16 +28,17 @@ const Index: React.FC = () => {
       <div className="col-span-2 row-span-2 h-screen">
         <Tabs>
           <TabList>
+            <Tab>Diagram</Tab>
             <Tab>Editor</Tab>
-            <Tab>Graph</Tab>
           </TabList>
 
           <TabPanel>
-            <Editor text={state.text} />
+            <Diagram text={state.text} />
+            <div id="diagram-container"></div>
           </TabPanel>
 
           <TabPanel>
-            <h1>Here is graph</h1>
+            <Editor text={state.text} />
           </TabPanel>
         </Tabs>
       </div>

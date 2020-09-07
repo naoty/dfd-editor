@@ -34,7 +34,7 @@ type State = {
 export const initialState: State = {
   nodes: {},
   edges: {},
-  text: "graph TD",
+  text: "graph TD\n",
 };
 
 type AddNodeAction = {
