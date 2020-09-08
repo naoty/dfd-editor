@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect } from "react";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 import { Tabs, TabList, Tab, TabPanel, resetIdCounter } from "react-tabs";
 import { initialState, reducer } from "../lib/reducer";
 import EdgesTable from "../components/EdgesTable";
@@ -32,6 +33,10 @@ const Index: React.FC = () => {
 
   return (
     <main className="grid grid-cols-3 grid-rows-2">
+      <Head>
+        <title>dfd-editor</title>
+      </Head>
+
       <div className="col-span-1 row-span-1 border-r border-b">
         <NodesTable nodes={Object.values(state.nodes)} dispatch={dispatch} />
       </div>
