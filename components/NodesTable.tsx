@@ -2,11 +2,12 @@ import React from "react";
 import { Node, NodeType, Action } from "../lib/reducer";
 
 interface Props {
+  className?: string;
   nodes: Node[];
   dispatch: React.Dispatch<Action>;
 }
 
-const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
+const NodesTable: React.FC<Props> = ({ className, nodes, dispatch }: Props) => {
   const handleDeleteButtonClick = (
     event: React.MouseEvent<SVGSVGElement, MouseEvent>
   ) => {
@@ -53,7 +54,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
   };
 
   return (
-    <>
+    <div className={className}>
       <div className="flex flex-row">
         <h1 className="flex-grow px-2 font-bold">Nodes</h1>
         <svg
@@ -137,7 +138,7 @@ const NodesTable: React.FC<Props> = ({ nodes, dispatch }: Props) => {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 };
 

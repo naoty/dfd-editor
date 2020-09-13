@@ -2,12 +2,18 @@ import React from "react";
 import { Node, Edge, Action } from "../lib/reducer";
 
 interface Props {
+  className?: string;
   nodes: Node[];
   edges: Edge[];
   dispatch: React.Dispatch<Action>;
 }
 
-const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
+const EdgesTable: React.FC<Props> = ({
+  className,
+  nodes,
+  edges,
+  dispatch,
+}: Props) => {
   const nodeOptions = nodes.map(node => (
     <option key={node.id} value={node.id}>
       {node.label}
@@ -60,7 +66,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
   };
 
   return (
-    <>
+    <div className={className}>
       <div className="flex flex-row">
         <h1 className="flex-grow px-2 font-bold">Edges</h1>
         <svg
@@ -141,7 +147,7 @@ const EdgesTable: React.FC<Props> = ({ nodes, edges, dispatch }: Props) => {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 };
 

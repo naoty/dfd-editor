@@ -38,11 +38,16 @@ const Index: React.FC = () => {
         <title>dfd-editor</title>
       </Head>
 
-      <SplitPane split="vertical" defaultSize={400}>
-        <div className="border-r">
-          <NodesTable nodes={Object.values(state.nodes)} dispatch={dispatch} />
+      <SplitPane split="vertical" defaultSize="30%">
+        <div className="h-full flex flex-col border-r">
+          <NodesTable
+            className="flex-1 border-b"
+            nodes={Object.values(state.nodes)}
+            dispatch={dispatch}
+          />
 
           <EdgesTable
+            className="flex-1"
             nodes={Object.values(state.nodes)}
             edges={Object.values(state.edges)}
             dispatch={dispatch}
