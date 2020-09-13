@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import SplitPane from "react-split-pane";
 import { Tabs, TabList, Tab, TabPanel, resetIdCounter } from "react-tabs";
 import { initialState, reducer } from "../lib/reducer";
 import EdgesTable from "../components/EdgesTable";
@@ -32,24 +33,22 @@ const Index: React.FC = () => {
   resetIdCounter();
 
   return (
-    <main className="grid grid-cols-3 grid-rows-2">
+    <main>
       <Head>
         <title>dfd-editor</title>
       </Head>
 
-      <div className="col-span-1 row-span-1 border-r border-b">
-        <NodesTable nodes={Object.values(state.nodes)} dispatch={dispatch} />
-      </div>
+      <SplitPane split="vertical" defaultSize={400}>
+        <div className="border-r">
+          <NodesTable nodes={Object.values(state.nodes)} dispatch={dispatch} />
 
-      <div className="col-span-1 row-span-1 row-start-2 border-r">
-        <EdgesTable
-          nodes={Object.values(state.nodes)}
-          edges={Object.values(state.edges)}
-          dispatch={dispatch}
-        />
-      </div>
+          <EdgesTable
+            nodes={Object.values(state.nodes)}
+            edges={Object.values(state.edges)}
+            dispatch={dispatch}
+          />
+        </div>
 
-      <div className="col-span-2 row-span-2 h-screen">
         <Tabs>
           <TabList>
             <Tab>Diagram</Tab>
@@ -65,7 +64,7 @@ const Index: React.FC = () => {
             <Editor text={state.text} />
           </TabPanel>
         </Tabs>
-      </div>
+      </SplitPane>
     </main>
   );
 };

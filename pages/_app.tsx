@@ -1,4 +1,5 @@
 import "../styles/index.css";
+import "../styles/resizer.css";
 import "react-tabs/style/react-tabs.css";
 
 import { AppProps } from "next/app";
